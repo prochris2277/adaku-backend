@@ -82,27 +82,34 @@ const updateTask = (req, res) => {
 }
 
 const deleteTask = (req, res) => {
-    const paramsId = req.params.id
-     const task = tasks.find(task => task.id === Number(paramsId))
+     const paramsId = Number(req.params.id);
 
+    const taskIndex = tasks.findIndex(task => task.id === paramsId);
 
-    if (!task) {
+    if (taskIndex === -1) {
         return res.status(404).json({
             status: 'fail',
             message: 'Invalid ID'
-        })
+        });
     }
 
-    tasks.pop(task)
+    const deletedTask = tasks.splice(taskIndex, 1);
+
     fs.writeFile('./data.json', JSON.stringify(tasks), (err) => {
-        res.status(201).json({
+        if (err) {
+            return res.status(500).json({
+                status: 'fail',
+                message: 'Could not delete task'
+            });
+        }
+
+        res.status(200).json({
             status: 'success',
             data: {
-                task: 'successfully deleted'
+                task: deletedTask[0]
             }
-
-        })
-    })
+        });
+    });
 }
 
 
