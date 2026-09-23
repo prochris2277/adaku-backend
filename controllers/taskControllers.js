@@ -43,14 +43,20 @@ const createTask = (req, res) => {
 
     tasks.push(newTask)
     fs.writeFile('./data.json', JSON.stringify(tasks), (err) => {
-        res.status(201).json({
-            status: 'success',
-            data: {
-                task: newTask
-            }
+    if (err) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Could not create task'
+        });
+    }
 
-        })
-    })
+    res.status(201).json({
+        status: 'success',
+        data: {
+            task: newTask
+        }
+    });
+});
 }
 
  
@@ -72,13 +78,20 @@ const updateTask = (req, res) => {
     task.dueDate = req.body.dueDate || task.dueDate;
 
     fs.writeFile('./data.json', JSON.stringify(tasks), (err) => {
+    if (err) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Could not update task'
+        });
+    }
+
     res.status(200).json({
         status: 'success',
         data: {
             task
         }
-    })
-})
+    });
+});
 }
 
 const deleteTask = (req, res) => {
