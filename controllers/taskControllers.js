@@ -100,7 +100,7 @@ const updateTask = (req, res) => {
 const deleteTask = (req, res) => {
      const paramsId = Number(req.params.id);
 
-    const taskIndex = tasks.findIndex(task => task.id === paramsId);
+    const taskIndex = tasks.findIndex(task => Number(task.id) === paramsId);
 
     if (taskIndex === -1) {
         return res.status(404).json({
