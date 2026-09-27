@@ -38,7 +38,10 @@ const getTask = (req, res) => {
 }
 
 const createTask = (req, res) => {
-    const newTasksId = Number(tasks[tasks.length - 1].id) + 1
+     const newTasksId =
+  tasks.length === 0
+    ? 1
+    : Number(tasks[tasks.length - 1].id) + 1;
     const newTask = Object.assign({id: newTasksId}, req.body )
 
     tasks.push(newTask)
